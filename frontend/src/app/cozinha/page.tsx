@@ -14,6 +14,7 @@ type KDSTicket = {
   tempo_decorrido_minutos: number;
   status: 'Pendente' | 'Em Preparo';
   itens: ItemComandaMock[];
+  itensAgrupados: { produto_nome: string; quantidade: number; observacoes?: string }[];
 };
 
 export default function CozinhaPage() {
@@ -43,10 +44,22 @@ export default function CozinhaPage() {
               mesa_id: item.mesa_id,
               hora_pedido: item.hora_pedido,
               status: item.status, // consideramos o status do primeiro item (normalmente todos mudam juntos)
-              itens: []
+              itens: [],
+              _agrupamentoVisual: {}
             };
           }
           acc[key].itens.push(item);
+          
+          const agKey = `${item.produto}-${item.observacoes || ''}`;
+          if (!acc[key]._agrupamentoVisual[agKey]) {
+            acc[key]._agrupamentoVisual[agKey] = {
+              produto_nome: item.produto_nome,
+              quantidade: 0,
+              observacoes: item.observacoes
+            };
+          }
+          acc[key]._agrupamentoVisual[agKey].quantidade += Number(item.quantidade);
+
           return acc;
         }, {});
 
@@ -69,6 +82,7 @@ export default function CozinhaPage() {
           const diffMinutos = Math.floor((agora - pedidoMs) / 60000);
           return {
             ...t,
+            itensAgrupados: Object.values(t._agrupamentoVisual),
             tempo_decorrido_minutos: diffMinutos > 0 ? diffMinutos : 0
           };
         }) as KDSTicket[];
@@ -195,8 +209,8 @@ export default function CozinhaPage() {
                     </div>
                   </div>
                   
-                  <div className="space-y-4 mb-6 flex-1">
-                    {ticket.itens.map((item, idx) => (
+                  <div className="space-y-4 mb-6 flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-700 max-h-[350px]">
+                    {ticket.itensAgrupados.map((item, idx) => (
                       <div key={idx} className="flex flex-col border-b border-slate-700/50 pb-3 last:border-0 last:pb-0">
                         <div className="flex items-start gap-3">
                           <span className="font-black text-xl text-orange-400 min-w-[32px]">{item.quantidade}x</span>
