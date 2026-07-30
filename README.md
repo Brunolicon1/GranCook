@@ -69,5 +69,13 @@ O projeto foi projetado para rodar com extrema facilidade utilizando o **Docker 
 Este projeto está configurado para deploy automatizado (Infrastructure as Code) via **Render.com**. 
 Basta conectar este repositório no seu dashboard do Render e utilizar a opção **Blueprint** selecionando o arquivo `render.yaml` localizado na raiz do projeto. O Render irá provisionar todos os recursos necessários automaticamente.
 
+### 📝 Nota sobre Arquitetura (Redis & Celery)
+O ecossistema original do GranCook foi desenhado utilizando **Redis** (como banco de dados em memória/cache super rápido) e **Celery** (um "worker" para processar tarefas pesadas em segundo plano, como envio de notificações e relatórios, sem travar a navegação do usuário).
+No entanto, a maioria das plataformas em nuvem (incluindo o Render) exige um plano pago para manter serviços de "Workers" (processamento em background) e instâncias gerenciadas de Redis.
+Para viabilizar este projeto como um portfólio **100% gratuito** na nuvem:
+- O **Celery** e o **Redis** foram temporariamente retirados do arquivo de orquestração de deploy (`render.yaml`).
+- O Backend (Django) foi reconfigurado com contingência para utilizar memória local (`LocMemCache`) na ausência do Redis, garantindo que a aplicação funcione com alta performance mesmo na nuvem gratuita.
+- Caso o projeto seja rodado localmente (via Docker Compose), o ecossistema completo com a dupla Redis/Celery subirá e funcionará perfeitamente.
+
 ---
 *Desenvolvido como projeto de portfólio para demonstrar arquitetura Full Stack, modelagem de dados complexa e design de interface focada na experiência do usuário.*
