@@ -10,3 +10,6 @@ python manage.py collectstatic --no-input
 
 # Apply any outstanding database migrations
 python manage.py migrate
+
+# Popular banco com dados iniciais (Mesas, Produtos, Usuários)
+python manage.py shell < seed_db.py
