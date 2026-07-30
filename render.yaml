@@ -12,11 +12,6 @@ services:
         fromDatabase:
           name: grancook-db
           property: connectionString
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: grancook-redis
-          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
@@ -25,6 +20,9 @@ services:
         value: ".onrender.com"
       - key: CORS_ALLOW_ALL_ORIGINS
         value: "True"
+      # Usando banco de dados para evitar erro do Redis gratuito indisponível
+      - key: REDIS_URL
+        value: "dummy"
 
   # Frontend Next.js
   - type: web
@@ -38,43 +36,9 @@ services:
       - key: NEXT_PUBLIC_API_URL
         value: "https://grancook-backend.onrender.com/api"
 
-  # Worker do Celery (Motor de Retenção)
-  - type: worker
-    name: grancook-celery
-    env: python
-    region: ohio
-    plan: free
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "celery -A core worker -l info"
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: grancook-db
-          property: connectionString
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: grancook-redis
-          property: connectionString
-      - key: SECRET_KEY
-        fromService:
-          type: web
-          name: grancook-backend
-          envVarKey: SECRET_KEY
-      - key: DEBUG
-        value: "False"
-
 databases:
   - name: grancook-db
     databaseName: grancook_db
     user: grancook_user
-    plan: free
-    region: ohio
-
-# Note: Redis managed object might require a paid plan on Render. 
-# If free tier is needed, consider an external free Redis (like Upstash)
-# and set REDIS_URL manually in the dashboard, removing this block.
-redis:
-  - name: grancook-redis
     plan: free
     region: ohio
