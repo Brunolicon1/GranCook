@@ -1,0 +1,80 @@
+services:
+  # Servidor Backend Django
+  - type: web
+    name: grancook-backend
+    env: python
+    region: ohio
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn core.wsgi:application --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: grancook-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: grancook-redis
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: CORS_ALLOW_ALL_ORIGINS
+        value: "True"
+
+  # Frontend Next.js
+  - type: web
+    name: grancook-frontend
+    env: node
+    region: ohio
+    plan: free
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm run start"
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: "https://grancook-backend.onrender.com/api"
+
+  # Worker do Celery (Motor de Retenção)
+  - type: worker
+    name: grancook-celery
+    env: python
+    region: ohio
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "celery -A core worker -l info"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: grancook-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: grancook-redis
+          property: connectionString
+      - key: SECRET_KEY
+        fromService:
+          type: web
+          name: grancook-backend
+          envVarKey: SECRET_KEY
+      - key: DEBUG
+        value: "False"
+
+databases:
+  - name: grancook-db
+    databaseName: grancook_db
+    user: grancook_user
+    plan: free
+    region: ohio
+
+# Note: Redis managed object might require a paid plan on Render. 
+# If free tier is needed, consider an external free Redis (like Upstash)
+# and set REDIS_URL manually in the dashboard, removing this block.
+redis:
+  - name: grancook-redis
+    plan: free
+    region: ohio

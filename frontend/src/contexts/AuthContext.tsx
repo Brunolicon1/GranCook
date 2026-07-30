@@ -3,9 +3,9 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 
-const API_BASE = typeof window !== 'undefined' 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' 
   ? `http://${window.location.hostname}:8000/api` 
-  : 'http://localhost:8000/api';
+  : 'http://localhost:8000/api');
 
 type UserProfile = {
   id: number;

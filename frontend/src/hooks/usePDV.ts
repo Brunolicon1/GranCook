@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { apiFetch } from '@/services/apiClient';
 import { MesaMock, ItemComandaMock, PagamentoMock, ProdutoMock } from '@/services/mockData';
 
-const API_BASE = typeof window !== 'undefined'
-  ? `http://${window.location.hostname}:8000/api/pdv`
-  : 'http://localhost:8000/api/pdv';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL 
+  ? `${process.env.NEXT_PUBLIC_API_URL}/pdv`
+  : (typeof window !== 'undefined'
+    ? `http://${window.location.hostname}:8000/api/pdv`
+    : 'http://localhost:8000/api/pdv');
 
 export function usePDV() {
   const [searchTerm, setSearchTerm] = useState('');
