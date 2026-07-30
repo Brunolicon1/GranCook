@@ -88,7 +88,7 @@ export default function TableDrawer({ mesa, mesas = [], produtos = [], itens, pa
 
   // Agrupamento visual de itens idênticos
   const groupedItensDaMesa = Object.values(itensDaMesa.reduce((acc, item) => {
-    const key = `${item.produto_id}-${item.observacao || ''}`;
+    const key = `${item.produto_id}-${item.observacoes || ''}`;
     if (!acc[key]) {
       acc[key] = { ...item, quantidade: Number(item.quantidade), ids: [item.id] };
     } else {
@@ -130,7 +130,7 @@ export default function TableDrawer({ mesa, mesas = [], produtos = [], itens, pa
       produto_setor: produtoSelecionado.setor,
       quantidade: quantidade,
       preco_unitario: produtoSelecionado.preco,
-      observacao: observacao,
+      observacoes: observacao,
       entregar_junto_com_prato: false,
     }]);
 
@@ -330,8 +330,8 @@ export default function TableDrawer({ mesa, mesas = [], produtos = [], itens, pa
                       <span className="text-blue-400 mr-2">{item.quantidade}x</span>
                       {item.produto_nome}
                     </p>
-                    {item.observacao && (
-                      <p className="text-xs text-amber-400/80 mt-1 italic">Obs: {item.observacao}</p>
+                    {item.observacoes && (
+                      <p className="text-xs text-amber-400/80 mt-1 italic">Obs: {item.observacoes}</p>
                     )}
                     {hasCozinha && item.produto_setor === 'Copa' && (
                       <label className="flex items-center gap-2 mt-2 cursor-pointer">
@@ -409,7 +409,7 @@ export default function TableDrawer({ mesa, mesas = [], produtos = [], itens, pa
                       <span className="ml-2 text-red-400 text-xs font-bold bg-red-900/30 px-2 py-0.5 rounded-full">(-{numCancelados} excluir)</span>
                     )}
                   </p>
-                  {item.observacao && <p className="text-xs text-slate-500 italic mt-0.5">Obs: {item.observacao}</p>}
+                  {item.observacoes && <p className="text-xs text-slate-500 italic mt-0.5">Obs: {item.observacoes}</p>}
                 </div>
                 <div className="flex items-center gap-4">
                   <p className="font-bold text-slate-300 text-sm">
@@ -610,7 +610,7 @@ export default function TableDrawer({ mesa, mesas = [], produtos = [], itens, pa
               {Object.values(itensDaMesa
                 .filter(item => idsParaCancelar.includes(item.id))
                 .reduce((acc, item) => {
-                  const key = `${item.produto_id}-${item.observacao || ''}`;
+                  const key = `${item.produto_id}-${item.observacoes || ''}`;
                   if (!acc[key]) acc[key] = { ...item, quantidade: 1 };
                   else acc[key].quantidade = Number(acc[key].quantidade) + 1;
                   return acc;

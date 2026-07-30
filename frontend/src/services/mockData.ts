@@ -22,7 +22,7 @@ export interface ProdutoMock {
 }
 
 export interface ItemComandaMock {
-  id: string; // usar string para gerar IDs unicos no front (ex: Date.now().toString())
+  id: number;
   mesa_id: number;
   produto_id?: number;
   produto_nome: string;

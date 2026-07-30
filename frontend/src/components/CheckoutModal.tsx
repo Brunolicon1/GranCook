@@ -493,14 +493,14 @@ export default function CheckoutModal({ isOpen, mesa, mesas, itens, pagamentosPr
   };
 
   const renderSplitItems = () => {
-    const incrementItem = (id: string, max: number) => {
+    const incrementItem = (id: number, max: number) => {
       setSelectedItemCounts(prev => ({
         ...prev,
         [id]: Math.min((prev[id] || 0) + 1, max)
       }));
     };
 
-    const decrementItem = (id: string) => {
+    const decrementItem = (id: number) => {
       setSelectedItemCounts(prev => {
         const current = prev[id] || 0;
         if (current <= 1) {

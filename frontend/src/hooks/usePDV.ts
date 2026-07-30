@@ -132,7 +132,7 @@ export function usePDV() {
       const payloadItens = novosItensData.map(item => ({
         produto_id: item.produto_id,
         quantidade: item.quantidade,
-        observacoes: item.observacao || ''
+        observacoes: item.observacoes || ''
       }));
 
       await apiFetch(`${API_BASE}/comandas/${comanda.id}/adicionar_itens/`, {
