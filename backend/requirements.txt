@@ -1,0 +1,27 @@
+# Framework Core
+Django==5.0.3
+djangorestframework==3.15.1
+
+# Banco de Dados (PostgreSQL)
+psycopg2-binary==2.9.9
+
+# Gerenciamento de Variáveis de Ambiente
+python-dotenv==1.0.1
+django-environ==0.11.2
+
+# Cache (Redis)
+redis==5.0.3
+django-redis==5.4.0
+
+# CORS (Para comunicação com o Front-end Next.js)
+django-cors-headers==4.3.1
+
+# Documentação Swagger
+drf-spectacular==0.27.1
+
+# Servidor WSGI para Produção
+gunicorn==21.2.0
+
+# Processamento em Segundo Plano (Motor de Retenção)
+celery==5.3.6
+djangorestframework-simplejwt==5.3.1
