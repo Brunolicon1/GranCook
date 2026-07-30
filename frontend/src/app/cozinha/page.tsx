@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import AuthGuard from '@/components/AuthGuard';
 import { useAuth } from '@/contexts/AuthContext';
 import { ChefHat, LogOut, Clock, CheckCircle, Play } from 'lucide-react';
-import { apiFetch } from '@/services/apiClient';
+import { apiFetch, API_BASE } from '@/services/apiClient';
 import { ItemComandaMock } from '@/services/mockData';
 
 type KDSTicket = {
@@ -30,7 +30,7 @@ export default function CozinhaPage() {
 
   const fetchTickets = useCallback(async () => {
     try {
-      const res = await apiFetch(`http://${window.location.hostname}:8000/api/pdv/kds/tickets/?setor=${setor}`);
+      const res = await apiFetch(`${API_BASE}/pdv/kds/tickets/?setor=${setor}`);
       if (res.ok) {
         const data = await res.json();
         
@@ -119,7 +119,7 @@ export default function CozinhaPage() {
     // Para atualizar o ticket inteiro, mandamos os ids de todos os itens daquele ticket
     const itemIds = ticket.itens.map(i => i.id);
     try {
-      await apiFetch(`http://${window.location.hostname}:8000/api/pdv/kds/atualizar_ticket/`, {
+      await apiFetch(`${API_BASE}/pdv/kds/atualizar_ticket/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids: itemIds, status: novoStatus })
