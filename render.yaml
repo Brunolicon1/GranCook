@@ -3,6 +3,7 @@ services:
   - type: web
     name: grancook-backend
     env: python
+    rootDir: backend
     region: ohio
     plan: free
     buildCommand: "./build.sh"
@@ -28,6 +29,7 @@ services:
   - type: web
     name: grancook-frontend
     env: node
+    rootDir: frontend
     region: ohio
     plan: free
     buildCommand: "npm install && npm run build"
