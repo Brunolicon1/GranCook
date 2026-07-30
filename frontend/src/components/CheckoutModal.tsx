@@ -60,7 +60,7 @@ export default function CheckoutModal({ isOpen, mesa, mesas, itens, pagamentosPr
 
   // Agrupamento visual de itens idênticos
   const itensDaConta = Object.values(itensDaContaRaw.reduce((acc, item) => {
-    const key = `${item.produto_id}-${item.observacao || ''}`;
+    const key = `${item.produto_id}-${item.observacoes || ''}`;
     if (!acc[key]) {
       acc[key] = { ...item, quantidade: Number(item.quantidade) };
     } else {
