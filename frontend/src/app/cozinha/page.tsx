@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import AuthGuard from '@/components/AuthGuard';
 import { useAuth } from '@/contexts/AuthContext';
-import { ChefHat, LogOut, Clock, CheckCircle, Play } from 'lucide-react';
+import { ChefHat, LogOut, Clock, CheckCircle, Monitor } from 'lucide-react';
 import { apiFetch, API_BASE } from '@/services/apiClient';
 import { ItemComandaMock } from '@/services/mockData';
 
@@ -167,8 +167,13 @@ export default function CozinhaPage() {
               <ChefHat size={24} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">KDS - {setor}</h1>
-              <p className="text-slate-400 text-sm font-medium">Logado como: <span className="text-white">{user?.username}</span></p>
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl font-bold tracking-tight">KDS - {setor}</h1>
+                <span className="bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_10px_rgba(99,102,241,0.2)]">
+                  <Monitor size={14} /> Interface para TV
+                </span>
+              </div>
+              <p className="text-slate-400 text-sm font-medium mt-0.5">Logado como: <span className="text-white">{user?.username}</span></p>
             </div>
           </div>
           <button 
