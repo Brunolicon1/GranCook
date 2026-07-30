@@ -11,7 +11,8 @@ import {
   ChefHat, 
   LogOut,
   Settings,
-  ReceiptText
+  ReceiptText,
+  FileText
 } from 'lucide-react';
 
 export default function GerenteLayout({ children }: { children: React.ReactNode }) {
@@ -27,6 +28,7 @@ export default function GerenteLayout({ children }: { children: React.ReactNode 
     { name: 'Dashboard', path: '/gerente', icon: LayoutDashboard },
     { name: 'Cardápio / Produtos', path: '/gerente/produtos', icon: UtensilsCrossed },
     { name: 'Histórico de Vendas', path: '/gerente/historico', icon: ReceiptText },
+    { name: 'Notas Fiscais', path: '/gerente/notas-fiscais', icon: FileText },
     { name: 'Mapa de Mesas (PDV)', path: '/pdv', icon: Map, external: true },
     { name: 'Cozinha (KDS)', path: '/cozinha', icon: ChefHat, external: true },
   ];
