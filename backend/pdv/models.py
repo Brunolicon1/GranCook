@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 from estoque.models import Produto
 
 class Mesa(models.Model):
@@ -74,3 +75,26 @@ class Pagamento(models.Model):
     
     def __str__(self):
         return f"Pagamento R${self.valor} ({self.get_forma_pagamento_display()}) - Comanda {self.comanda.id}"
+
+class NotaFiscal(models.Model):
+    STATUS_CHOICES = [
+        ('pendente', 'Pendente de Emissão'),
+        ('processando', 'Processando na Sefaz'),
+        ('emitida', 'Autorizada (Emitida)'),
+        ('erro', 'Rejeitada/Erro Sefaz'),
+        ('cancelada', 'Cancelada'),
+    ]
+    comanda = models.OneToOneField(Comanda, on_delete=models.CASCADE, related_name='nota_fiscal')
+    referencia = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, help_text="Referência única para a API da Focus")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente')
+    chave_acesso = models.CharField(max_length=44, blank=True, null=True, help_text="Chave de 44 dígitos da Sefaz")
+    numero = models.CharField(max_length=20, blank=True, null=True)
+    serie = models.CharField(max_length=5, blank=True, null=True)
+    caminho_xml = models.URLField(max_length=500, blank=True, null=True)
+    caminho_pdf = models.URLField(max_length=500, blank=True, null=True)
+    mensagem_sefaz = models.TextField(blank=True, null=True)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"NFC-e da Comanda #{self.comanda.id} - {self.get_status_display()}"

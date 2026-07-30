@@ -3,8 +3,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils import timezone
 from django.db.models import Sum, Count, F
-from .models import Mesa, Comanda, ItemComanda, Pagamento
-from .serializers import MesaSerializer, ComandaSerializer, ItemComandaSerializer, PagamentoSerializer, ProdutoSerializer
+from .models import Mesa, Comanda, ItemComanda, Pagamento, NotaFiscal
+from .serializers import MesaSerializer, ComandaSerializer, ItemComandaSerializer, PagamentoSerializer, ProdutoSerializer, NotaFiscalSerializer
+from .services.focus_nfe import emitir_nota_fiscal
 from estoque.models import Produto
 
 class MesaViewSet(viewsets.ModelViewSet):
@@ -358,3 +359,19 @@ class DashboardViewSet(viewsets.ViewSet):
             'top_produtos': top_produtos,
             'itens_cancelados': itens_cancelados
         })
+
+class NotaFiscalViewSet(viewsets.ModelViewSet):
+    queryset = NotaFiscal.objects.all().order_by('-criado_em')
+    serializer_class = NotaFiscalSerializer
+
+    @action(detail=False, methods=['post'])
+    def emitir(self, request):
+        comanda_id = request.data.get('comanda_id')
+        if not comanda_id:
+            return Response({'error': 'ID da comanda não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        resultado = emitir_nota_fiscal(comanda_id)
+        if resultado.get('sucesso'):
+            return Response(resultado, status=status.HTTP_200_OK)
+        else:
+            return Response(resultado, status=status.HTTP_400_BAD_REQUEST)

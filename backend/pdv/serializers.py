@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Mesa, Comanda, ItemComanda, Pagamento
+from .models import Mesa, Comanda, ItemComanda, Pagamento, NotaFiscal
+from estoque.models import Produto
 from estoque.models import Produto
 
 class MesaSerializer(serializers.ModelSerializer):
@@ -50,3 +51,17 @@ class ComandaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comanda
         fields = '__all__'
+
+class NotaFiscalSerializer(serializers.ModelSerializer):
+    mesa_id = serializers.IntegerField(source='comanda.mesa.id', read_only=True, allow_null=True)
+    mesa_numero = serializers.IntegerField(source='comanda.mesa.numero', read_only=True, allow_null=True)
+    valor_total = serializers.SerializerMethodField()
+    data = serializers.DateTimeField(source='criado_em', read_only=True)
+    
+    class Meta:
+        model = NotaFiscal
+        fields = ['id', 'comanda', 'status', 'chave_acesso', 'caminho_xml', 'caminho_pdf', 'mensagem_sefaz', 'mesa_id', 'mesa_numero', 'valor_total', 'data']
+
+    def get_valor_total(self, obj):
+        total = sum((item.quantidade * item.preco_unitario) for item in obj.comanda.itens.all())
+        return float(total - obj.comanda.desconto + obj.comanda.taxa_servico)

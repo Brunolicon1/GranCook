@@ -33,6 +33,7 @@ services:
       - DB_USER=grancook_user
       - DB_PASS=grancook_password
       - REDIS_URL=redis://redis:6379/1
+      - FOCUS_NFE_TOKEN=${FOCUS_NFE_TOKEN:-}
     depends_on:
       - db
       - redis
@@ -49,6 +50,7 @@ services:
       - DB_USER=grancook_user
       - DB_PASS=grancook_password
       - REDIS_URL=redis://redis:6379/1
+      - FOCUS_NFE_TOKEN=${FOCUS_NFE_TOKEN:-}
     depends_on:
       - db
       - redis
