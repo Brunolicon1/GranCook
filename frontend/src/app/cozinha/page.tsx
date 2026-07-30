@@ -200,7 +200,7 @@ export default function CozinhaPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {ticketsAtivos.map(ticket => (
-                <div key={`${ticket.comanda_id}-${ticket.hora_pedido}`} className={`relative flex flex-col justify-between p-5 rounded-2xl border backdrop-blur-md transition-all duration-300 ${getCardStyles(ticket.tempo_decorrido_minutos)}`}>
+                <div key={`${ticket.comanda_id}-${ticket.hora_pedido}`} className={`relative flex flex-col justify-between p-5 rounded-2xl border backdrop-blur-md transition-all duration-300 h-[420px] ${getCardStyles(ticket.tempo_decorrido_minutos)}`}>
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-3xl font-bold text-white tracking-tight">Mesa {ticket.mesa_id}</h3>
                     <div className="flex items-center gap-1.5 text-slate-300 bg-slate-900/50 px-3 py-1.5 rounded-lg font-mono font-bold text-lg border border-slate-700/50">
@@ -209,7 +209,7 @@ export default function CozinhaPage() {
                     </div>
                   </div>
                   
-                  <div className="space-y-4 mb-6 flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-700 max-h-[350px]">
+                  <div className="space-y-4 mb-6 flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-700">
                     {ticket.itensAgrupados.map((item, idx) => (
                       <div key={idx} className="flex flex-col border-b border-slate-700/50 pb-3 last:border-0 last:pb-0">
                         <div className="flex items-start gap-3">
