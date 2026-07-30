@@ -58,9 +58,9 @@ export default function CheckoutModal({ isOpen, mesa, mesas, itens, pagamentosPr
   const idsDoGrupo = mesasDoGrupo.map(m => m.id);
   const itensDaContaRaw = itens.filter(item => idsDoGrupo.includes(item.mesa_id));
 
-  // Agrupamento visual de itens idênticos
+  // Agrupamento financeiro de itens (ignora observações na hora de pagar)
   const itensDaConta = Object.values(itensDaContaRaw.reduce((acc, item) => {
-    const key = `${item.produto_id}-${item.observacoes || ''}`;
+    const key = `${item.produto_id}`;
     if (!acc[key]) {
       acc[key] = { ...item, quantidade: Number(item.quantidade) };
     } else {
@@ -546,11 +546,6 @@ export default function CheckoutModal({ isOpen, mesa, mesas, itens, pagamentosPr
                   <p className={`font-bold text-sm ${isSelected ? 'text-white' : 'text-slate-400'}`}>
                     <span className={isSelected ? 'text-blue-400' : 'text-slate-500'}>{item.quantidade}x </span>
                     {item.produto_nome}
-                    {item.observacoes && (
-                      <span className="text-xs text-amber-400 font-black ml-2 uppercase tracking-wide">
-                        ({item.observacoes})
-                      </span>
-                    )}
                   </p>
                   <p className="text-xs text-slate-500 mt-1">
                     {formatCurrency(Number(item.preco_unitario))} / un
