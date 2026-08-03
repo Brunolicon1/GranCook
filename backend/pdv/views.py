@@ -151,10 +151,16 @@ class ComandaViewSet(viewsets.ModelViewSet):
         if instance.status == 'Fechada' and not instance.data_fechamento:
             instance.data_fechamento = timezone.now()
             instance.save()
+            
+            # Cria automaticamente o registro da Nota Fiscal pendente
+            NotaFiscal.objects.get_or_create(
+                comanda=instance,
+                defaults={'status': 'pendente'}
+            )
     
     @action(detail=False, methods=['get'])
     def historico(self, request):
-        comandas = Comanda.objects.filter(status__in=['Fechada', 'Cancelada']).order_by('-data_fechamento', '-id')
+        comandas = Comanda.objects.filter(status__in=['Fechada', 'Cancelada']).order_by(F('data_fechamento').desc(nulls_last=True), '-id')
         page = self.paginate_queryset(comandas)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
@@ -375,3 +381,28 @@ class NotaFiscalViewSet(viewsets.ModelViewSet):
             return Response(resultado, status=status.HTTP_200_OK)
         else:
             return Response(resultado, status=status.HTTP_400_BAD_REQUEST)
+
+    from rest_framework.permissions import AllowAny
+    
+    @action(detail=True, methods=['get'], permission_classes=[AllowAny])
+    def espelho(self, request, pk=None):
+        from django.http import HttpResponse
+        nota = self.get_object()
+        html = f"""
+        <html>
+            <head>
+                <title>Espelho NFC-e Simulação</title>
+                <style>
+                    body {{ background: #0f172a; color: #cbd5e1; font-family: monospace; padding: 2rem; }}
+                    pre {{ background: #1e293b; padding: 1.5rem; border-radius: 0.5rem; border: 1px solid #334155; overflow-x: auto; font-size: 14px; color: #10b981; }}
+                    h1 {{ color: #fff; }}
+                </style>
+            </head>
+            <body>
+                <h1>Simulação de Envio - Sefaz (MOCK)</h1>
+                <p>Este é o pacote JSON real que foi gerado pelo sistema e que seria enviado para a Focus NFe se estivéssemos no modo de Produção.</p>
+                <pre>{nota.mensagem_sefaz}</pre>
+            </body>
+        </html>
+        """
+        return HttpResponse(html)

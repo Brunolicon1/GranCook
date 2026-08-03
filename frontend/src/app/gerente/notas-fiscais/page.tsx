@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Search, Filter, CheckCircle, Clock, AlertTriangle, Download, Send, RefreshCw } from 'lucide-react';
 import { formatCurrency } from '@/utils/formatters';
-import { API_BASE } from '@/services/apiClient';
+import { API_BASE, apiFetch } from '@/services/apiClient';
 
 interface NotaFiscal {
   id: number;
@@ -27,10 +27,12 @@ export default function NotasFiscaisPage() {
 
   const fetchNotas = async () => {
     try {
-      const res = await fetch(`${API_BASE}/notas-fiscais/`);
+      const res = await apiFetch(`${API_BASE}/pdv/notas-fiscais/`);
       if (res.ok) {
         const data = await res.json();
         setNotas(data);
+      } else {
+        console.error('Falha ao carregar notas:', res.status);
       }
     } catch (error) {
       console.error('Erro ao buscar notas:', error);
@@ -46,7 +48,7 @@ export default function NotasFiscaisPage() {
   const emitirNota = async (comandaId: number) => {
     setEmittingId(comandaId);
     try {
-      const res = await fetch(`${API_BASE}/notas-fiscais/emitir/`, {
+      const res = await apiFetch(`${API_BASE}/pdv/notas-fiscais/emitir/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -195,7 +197,7 @@ export default function NotasFiscaisPage() {
                 </td>
                 <td className="px-6 py-4 text-right">
                   {nota.status === 'emitida' && nota.caminho_pdf ? (
-                    <a href={nota.caminho_pdf} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300 font-bold text-sm flex items-center justify-end gap-1.5 ml-auto transition-colors">
+                    <a href={nota.caminho_pdf.startsWith('/api') ? `${API_BASE.replace('/api', '')}${nota.caminho_pdf}` : nota.caminho_pdf} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300 font-bold text-sm flex items-center justify-end gap-1.5 ml-auto transition-colors">
                       <Download size={16} /> Baixar PDF
                     </a>
                   ) : (nota.status === 'pendente' || nota.status === 'erro' || nota.status === 'rejeitada') ? (

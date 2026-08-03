@@ -89,7 +89,9 @@ export function usePDV() {
       setItensComanda(todosItens);
       setPagamentosParciais(todosPagamentos);
     } catch (error) {
-      console.error('Erro ao carregar dados:', error);
+      // Usar console.warn ao invés de error para não engatilhar a tela vermelha (Error Overlay) do Next.js
+      // durante reloads rápidos do servidor backend.
+      console.warn('Falha silenciosa ao carregar dados (servidor pode estar reiniciando):', error);
     }
   };
 

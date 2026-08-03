@@ -26,3 +26,4 @@ whitenoise==6.6.0
 # Processamento em Segundo Plano (Motor de Retenção)
 celery==5.3.6
 djangorestframework-simplejwt==5.3.1
+requests==2.31.0

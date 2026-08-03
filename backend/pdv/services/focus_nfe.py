@@ -5,8 +5,9 @@ from decimal import Decimal
 from django.conf import settings
 from pdv.models import NotaFiscal, Comanda
 
-FOCUS_NFE_URL = "https://api.focusnfe.com.br/v2/nfce"
+FOCUS_NFE_URL = os.environ.get("FOCUS_NFE_URL", "https://homologacao.focusnfe.com.br/v2/nfce")
 FOCUS_NFE_TOKEN = os.environ.get("FOCUS_NFE_TOKEN", "")
+FOCUS_NFE_CNPJ = os.environ.get("FOCUS_NFE_CNPJ", "")
 
 def emitir_nota_fiscal(comanda_id):
     """
@@ -50,6 +51,17 @@ def emitir_nota_fiscal(comanda_id):
             "forma_pagamento": forma,
             "valor_pagamento": float(pag.valor)
         })
+
+    # MOCK MODE: Se o token for a palavra 'MOCK', simula sucesso imediato mostrando os dados enviados
+    if FOCUS_NFE_TOKEN == "MOCK":
+        nota.status = 'emitida'
+        nota.chave_acesso = '35230111111111111111591234567890123456789012'
+        nota.caminho_xml = ''
+        nota.caminho_pdf = f'/api/pdv/notas-fiscais/{nota.id}/espelho/'
+        # Guardamos o payload na mensagem para mostrar no PDF fake
+        nota.mensagem_sefaz = json.dumps(payload, indent=2, ensure_ascii=False)
+        nota.save()
+        return {"sucesso": True, "mensagem": "Nota processada na Sefaz (Simulada)", "nota": {"id": nota.id}}
 
     if not FOCUS_NFE_TOKEN:
         return {"sucesso": False, "mensagem": "Token da Focus NFe não configurado. Verifique o arquivo .env"}
