@@ -1,15 +1,21 @@
+<div align="center">
+  <b>🇺🇸 English</b> | <a href="README.pt-br.md">🇧🇷 Português</a>
+</div>
+
+---
+
 # 🍔 GranCook PDV
 
-![Status](https://img.shields.io/badge/Status-Ativo-green)
-![Conclusão](https://img.shields.io/badge/Conclus%C3%A3o-90%25-yellow)
+![Status](https://img.shields.io/badge/Status-Active-green)
+![Completion](https://img.shields.io/badge/Completion-90%25-yellow)
 
-Bem-vindo ao **GranCook**! Um sistema completo (Full Stack) de Ponto de Venda e Kitchen Display System (KDS) focado em restaurantes. Este projeto foi desenvolvido utilizando a filosofia e o fluxo de **Vibecoding**, inteiramente construído através da fantástica IDE **Antigravity**.
+Welcome to **GranCook**! A complete Full Stack Point of Sale (POS) and Kitchen Display System (KDS) focused on restaurants. This project was developed using the **Vibecoding** philosophy and workflow, built entirely through the fantastic **Antigravity IDE**.
 
-## 🌐 Acesso ao Sistema
-Você pode acessar e testar a versão em produção (na nuvem) acessando o link abaixo:
+## 🌐 Access the System
+You can access and test the production version (cloud-hosted) by clicking the link below:
 🔗 **[grancook.onrender.com](https://grancook.onrender.com)**
 
-Caso prefira rodar localmente, o projeto está configurado para iniciar de forma automatizada via Docker Compose:
+If you prefer to run it locally, the project is configured to start automatically via Docker Compose:
 
 ```bash
 git clone https://github.com/Brunolicon1/GranCook.git
@@ -17,31 +23,31 @@ cd GranCook
 docker compose up -d --build
 ```
 
-## ⚠️ Status do Projeto
-O sistema encontra-se **90% concluído** e ativo.
+## ⚠️ Project Status
+The system is currently **90% completed** and active.
 
-As principais rotinas de um restaurante já estão perfeitamente implementadas:
-- Controle de Mesas em tempo real (incluindo agrupamento e transferência).
-- KDS (Tela da Cozinha) com gerenciamento visual de fila.
-- Fechamento de caixa robusto (pagamentos parciais, gorjeta e descontos).
+The main routines of a restaurant are already perfectly implemented:
+- Real-time Table Management (including grouping and transferring).
+- KDS (Kitchen Display System) with visual queue management.
+- Robust Checkout System (partial payments, splitting, tips, and discounts).
 
-### 🚧 Próximas Atualizações Planejadas
-Ainda há algumas melhorias de segurança e operacionais que serão lapidadas nas próximas versões:
-- **Gerenciamento de Estoque:** Controle rígido de entrada e saída de insumos.
-- **Auditoria de Cancelamentos:** Refatoração do fluxo de cancelamento de itens para impedir fraudes (ex: o garçom receber o pagamento em dinheiro e cancelar o pedido na interface).
+### 🚧 Planned Updates
+There are still some security and operational improvements to be refined in upcoming versions:
+- **Inventory Management:** Strict tracking of raw material inputs and outputs.
+- **Cancellation Auditing:** Refactoring the item cancellation flow to prevent fraud (e.g., preventing waitstaff from receiving cash payments and canceling the order in the interface).
 
 > [!NOTE]
-> **Emissão de Notas (NFC-e):** A integração com a Sefaz para emissão de notas fiscais reais foi **desativada** nesta versão de demonstração. O fluxo funciona apenas internamente para fins de validação do sistema.
+> **Fiscal Invoicing (NFC-e):** The integration with the Brazilian Sefaz (Tax Authority) for real invoice emission has been **disabled** in this demo version. The flow works entirely internally for system validation purposes.
 
-## 🛠 Tecnologias Utilizadas (Vibecoding)
+## 🛠 Technologies Used (Vibecoding)
 - Next.js (App Router)
 - React & Tailwind CSS
 - Python & Django REST Framework
-- PostgreSQL (Banco de Dados Relacional)
-- Redis & Celery (Gerenciamento de Filas)
+- PostgreSQL (Relational Database)
+- Redis & Celery (Background Queue Management)
 - Docker & Docker Compose
 - **Antigravity IDE**
 
 ---
 
-*Desenvolvido em fluxo contínuo de vibecoding.* ✨
+*Developed in a continuous vibecoding flow.* ✨
