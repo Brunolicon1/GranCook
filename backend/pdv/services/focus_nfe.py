@@ -6,7 +6,7 @@ from django.conf import settings
 from pdv.models import NotaFiscal, Comanda
 
 FOCUS_NFE_URL = os.environ.get("FOCUS_NFE_URL", "https://homologacao.focusnfe.com.br/v2/nfce")
-FOCUS_NFE_TOKEN = os.environ.get("FOCUS_NFE_TOKEN", "")
+FOCUS_NFE_TOKEN = os.environ.get("FOCUS_NFE_TOKEN", "MOCK")
 FOCUS_NFE_CNPJ = os.environ.get("FOCUS_NFE_CNPJ", "")
 
 def emitir_nota_fiscal(comanda_id):
